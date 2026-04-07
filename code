@@ -1,0 +1,61 @@
+/*
+Library Book Management System in C
+Features:
+- Add book
+- Display books
+- Search book by ID
+- Issue book
+- Return book
+- Save/load from file
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define FILE_NAME "library.dat"
+
+typedef struct {
+    int id;
+    char title[50];
+    char author[50];
+    int isIssued;
+} Book;
+
+void addBook() {
+    FILE *fp = fopen(FILE_NAME, "ab");
+    Book b;
+
+    printf("Enter Book ID: ");
+    scanf("%d", &b.id);
+    printf("Enter Title: ");
+    scanf(" %[^
+]", b.title);
+    printf("Enter Author: ");
+    scanf(" %[^
+]", b.author);
+    b.isIssued = 0;
+
+    fwrite(&b, sizeof(Book), 1, fp);
+    fclose(fp);
+
+    printf("Book added successfully!\n");
+}
+
+void displayBooks() {
+    FILE *fp = fopen(FILE_NAME, "rb");
+    Book b;
+
+    if (!fp) {
+        printf("No records found!\n");
+        return;
+    }
+
+    printf("\n--- Book List ---\n");
+    while (fread(&b, sizeof(Book), 1, fp)) {
+        printf("ID: %d | Title: %s | Author: %s | Status: %s\n",
+               b.id, b.title, b.author,
+               b.isIssued ? "Issued" : "Available");
+    }
+
+}
